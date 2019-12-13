@@ -1,10 +1,9 @@
 package controller
 
 import (
-	"github.com/geobe/gostip/go/model"
 	scc "github.com/gorilla/securecookie"
-	"net/http"
 	"log"
+	"net/http"
 )
 
 // filter is called before chaining handlers. Next handler in
@@ -34,7 +33,7 @@ func SessionChecker(h http.Handler) http.Handler {
 
 // here the session check is actually implemented
 func checkSession(w http.ResponseWriter, r *http.Request) bool {
-	session, err := SessionStore().Get(r, S_DKFAI)
+	session, err := SessionStore().Get(r, S_PROXY)
 	if err != nil {
 		if err.(scc.Error).IsDecode() {
 			// recover from an old hanging session going to login
@@ -69,9 +68,10 @@ func logRequest(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
+/*
 // checkAuth is the filter function where the actual authorizing is done
 func checkAuth(w http.ResponseWriter, r *http.Request, mask interface{}) bool {
-	session, e0 := SessionStore().Get(r, S_DKFAI)
+	session, e0 := SessionStore().Get(r, S_PROXY)
 	m, ifaceok := mask.(int)
 	role, sessionok := session.Values["role"].(int)
 	if e0 != nil || !ifaceok || !sessionok {
@@ -94,49 +94,14 @@ func makeFilter(f func(http.ResponseWriter, *http.Request, interface{}) bool,
 }
 
 // authorize for anyone who is logged in
-func AuthAny(h http.Handler) http.Handler {
+func AuthTarget(h http.Handler) http.Handler {
 	c := chainableHandler{
 		filter: makeFilter(checkAuth, model.U_ALL),
 		chain:  h,
 	}
 	return c
 }
-
-// authorize for deans office staff for enrolling
-func AuthEnrol(h http.Handler) http.Handler {
-	c := chainableHandler{
-		filter: makeFilter(checkAuth, model.U_ENROL),
-		chain:  h,
-	}
-	return c
-}
-
-// authorize for project office staff
-func AuthProjectOffice(h http.Handler) http.Handler {
-	c := chainableHandler{
-		filter: makeFilter(checkAuth, model.U_POFF),
-		chain:  h,
-	}
-	return c
-}
-
-// authorize for user administrator
-func AuthUserAdmin(h http.Handler) http.Handler {
-	c := chainableHandler{
-		filter: makeFilter(checkAuth, model.U_UADMIN),
-		chain:  h,
-	}
-	return c
-}
-
-// authorize for master administrator
-func AuthMasterAdmin(h http.Handler) http.Handler {
-	c := chainableHandler{
-		filter: makeFilter(checkAuth, model.U_FULLADMIN),
-		chain:  h,
-	}
-	return c
-}
+*/
 
 //var options  []csrf.Option = []csrf.Option{csrf.Secure(viper.GetBool("csrfsecure"))}
 //var protector http.Handler

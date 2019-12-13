@@ -1,35 +1,44 @@
 {
-  "db": {
-    "type": "postgres",
-    "connect": "user=dkfaiprod dbname=dkfaiprod password=Fgm#idE#sdF#aTg sslmode=disable"
-  },
+  "httpport": 8070,
+  "httpsport": 8443,
+  "allowedHosts": [
+    "test1.spdns.org",
+    "ofnothing.afraid.org"
+  ],
   "users": [
     {
-      "login": "admin",
-      "fullname": "Der Meister",
-      "password": "nimda",
-      "roles": [ 1, 2, 4, 8, 255]
+      "login": "test",
+      "password": "test",
+      "access": [
+        "test1",
+        "test2"
+      ]
     },
     {
-      "login": "enrol",
-      "fullname": "Student enrolment",
-      "password": "enrol",
-      "roles": [1,2]
+      "login": "test1",
+      "password": "test1",
+      "access": [
+        "test1"
+      ]
     },
     {
-      "login": "proj",
-      "fullname": "Project office member",
-      "password": "proj",
-      "roles": [1, 2, 4]
-    },
-    {
-      "login": "uadmin",
-      "fullname": "User admin",
-      "password": "uadmin",
-      "roles": [1, 8]
+      "login": "test2",
+      "password": "test2",
+      "access": [
+        "test2"
+      ]
     }
   ],
-  "maxresults": [20, 30, 40, 50, 100, 150, 100, 100],
-  "csrfsecure": false,
-  "csrfkey": [59,232,185,100,198,214,196,211,126,134,229,236,174,64,163,157,142,69,239,124,228,234,18,50,139,14,171,226,231,113,114,172]
+  "targets": {
+    "test1": {
+      "host": "192.168.1.25",
+      "port": 8080,
+      "path": "/"
+    },
+    "test2": {
+      "host": "192.168.1.25",
+      "port": 8080,
+      "path": "/hurz"
+    }
+  }
 }
