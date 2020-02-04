@@ -1,6 +1,6 @@
 {
-  "httpport": 8070,
-  "httpsport": 8443,
+  "httpport": ":8070",
+  "httpsport": ":8443",
   "allowedHosts": [
     "test1.spdns.org",
     "ofnothing.afraid.org"

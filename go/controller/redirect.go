@@ -1,13 +1,12 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 	"net/url"
-	"strings"
-	"log"
 	"regexp"
+	"strings"
 )
-
 
 // RedirectHTTP is an HTTP handler (suitable for use with http.HandleFunc)
 // that responds to all requests by redirecting to the same URL served over HTTPS.
@@ -26,18 +25,19 @@ func RedirectHTTP(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, u.String(), 302)
 }
 
-// interne Aufrufe vom gleichen lokalen Netz mit Mux annehmen, sonst redirect auf HTTPS
+//struct to hold different route multiplexer. Internal calls from the same local net will be directly routed by Mux,
+//else redirect to Redirect that shall redirect to HTTPS
 type HandlerSwitch struct {
 	Mux          http.Handler
 	Redirect     http.Handler
 	AllowedHosts []string
 }
 
-// nicht richtig für 172.16.0.0/12
+// not correct for 172.16.0.0/12
 var matcher = regexp.MustCompile("(192\\.168.*)|(localhost)|(10\\..*)|(172\\..*)")
 
-// Handler function, die Internetzugriffe auf den Redirect Handler umleitet.
-// Lokale Zugriffe werden direkt von MUX geroutet
+// Handler function that redirects access from external internet to redirect handler.
+// Local is directly routed to  MUX.
 func (h *HandlerSwitch) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	host := r.Host
 	local := matcher.MatchString(host)
